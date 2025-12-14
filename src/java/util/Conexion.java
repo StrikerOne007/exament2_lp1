@@ -12,11 +12,17 @@ import java.sql.DriverManager;
  */
 public class Conexion {
 
-    private static final String URL =
-        "jdbc:postgresql://aws-1-us-east-1.pooler.supabase.com:6543/postgres?sslmode=require";
+    private static final String URL = System.getenv("DATABASE_URL") != null
+        ? System.getenv("DATABASE_URL")
+        : "jdbc:postgresql://aws-1-us-east-1.pooler.supabase.com:6543/postgres?sslmode=require";
 
-    private static final String USER = "postgres.qhdfgpyytllmsczpelgx";
-    private static final String PASSWORD = "fGaWyONPynaqjDjg";
+    private static final String USER = System.getenv("DATABASE_USER") != null
+        ? System.getenv("DATABASE_USER")
+        : "postgres.qhdfgpyytllmsczpelgx";
+
+    private static final String PASSWORD = System.getenv("DATABASE_PASSWORD") != null
+        ? System.getenv("DATABASE_PASSWORD")
+        : "fGaWyONPynaqjDjg";
 
     public static Connection getConnection() {
         Connection con = null;

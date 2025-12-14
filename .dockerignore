@@ -1,0 +1,9 @@
+build/
+nbproject/private/
+.git/
+.gitignore
+*.md
+test/
+.env
+*.log
+.DS_Store
