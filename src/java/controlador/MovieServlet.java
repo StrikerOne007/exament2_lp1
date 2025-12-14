@@ -34,7 +34,7 @@ public class MovieServlet extends HttpServlet {
         MovieDAO dao = new MovieDAOImpl();
         List<Movie> listaMovies = dao.listar();
         request.setAttribute("listaMovies", listaMovies);
-        request.getRequestDispatcher("/index.jsp").forward(request, response);
+        request.getRequestDispatcher("/WEB-INF/views/home.jsp").forward(request, response);
     }
 
     @Override

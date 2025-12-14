@@ -44,17 +44,19 @@
                         </button>
                     </div>
                 </header>
-                <section class="max-w-7xl mx-auto px-6 py-6 grid grid-cols-12 gap-4 items-end">  <!-- border-white -->
+                <section class="max-w-7xl mx-auto px-6 py-6 grid grid-cols-12 gap-4 items-end">
                     <div class="col-span-4">
-                        <label  class="text-sx text-gray-300 mb-1" for="">Busqueda</label>
-                        <input 
+                        <label class="text-sx text-gray-300 mb-1" for="searchInput">Busqueda</label>
+                        <input
+                            id="searchInput"
                             type="text"
                             placeholder="titulo, Id, nombre..."
-                            class="w-full bg-black/40 border-white/20 text-sm text-white px-2 py-1"  >
+                            onkeyup="filtrarPeliculas()"
+                            class="w-full bg-black/40 border-white/20 text-sm text-white px-2 py-1">
                     </div>
                     <div class="col-span-2">
-                        <label class="text-sx text-gray-300 mb-1" for="">Estado</label>
-                        <select class="w-full bg-black/40 border-white/20 text-sm text-white px-2 py-1" name="" id="">
+                        <label class="text-sx text-gray-300 mb-1" for="filterEstado">Estado</label>
+                        <select id="filterEstado" onchange="filtrarPeliculas()" class="w-full bg-black/40 border-white/20 text-sm text-white px-2 py-1">
                             <option value="all">Todo</option>
                             <option value="draft">borrador</option>
                             <option value="QA">QA</option>
@@ -62,8 +64,8 @@
                         </select>
                     </div>
                     <div class="col-span-2">
-                        <label class="text-sx text-gray-300 mb-1" for="">Tipo</label>
-                        <select class="w-full bg-black/40 border-white/20 text-sm text-white px-2 py-1" name="" id="">
+                        <label class="text-sx text-gray-300 mb-1" for="filterTipo">Tipo</label>
+                        <select id="filterTipo" onchange="filtrarPeliculas()" class="w-full bg-black/40 border-white/20 text-sm text-white px-2 py-1">
                             <option value="all">Todo</option>
                             <option value="movie">peliculas</option>
                             <option value="serie">Series</option>
@@ -139,7 +141,10 @@
                         if (listaMovies != null) {
                             for (Movie movie : listaMovies) {
                     %>
-                        <tr>
+                        <tr class="movie-row"
+                            data-title="<%= movie.getTitle().toLowerCase() %>"
+                            data-type="<%= movie.getType() %>"
+                            data-status="<%= movie.getStatus() %>">
                             <td><%= movie.getId() %></td>
                             <td>
                                 <img src="<%= movie.getImageUrl() %>" alt="<%= movie.getTitle() %>" class="w-12 h-16 object-cover rounded">
@@ -168,7 +173,10 @@
                     if (listaMovies != null) {
                         for (Movie movie : listaMovies) {
                 %>
-                    <div>
+                    <div class="movie-card"
+                         data-title="<%= movie.getTitle().toLowerCase() %>"
+                         data-type="<%= movie.getType() %>"
+                         data-status="<%= movie.getStatus() %>">
                         <div class="card card-side bg-base-100 shadow-md mb-2 hover:shadow-xl transition-shadow ">
                             <figure>
                                 <img
@@ -301,6 +309,33 @@
             document.getElementById('btnTarjetas').classList.remove('border-white/30');
             document.getElementById('btnTabla').classList.remove('border-purple-800', 'bg-purple-800/20');
             document.getElementById('btnTabla').classList.add('border-white/30');
+        }
+
+        function filtrarPeliculas() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const filterTipo = document.getElementById('filterTipo').value;
+            const filterEstado = document.getElementById('filterEstado').value;
+
+            const rows = document.querySelectorAll('.movie-row');
+            const cards = document.querySelectorAll('.movie-card');
+
+            [rows, cards].forEach(items => {
+                items.forEach(item => {
+                    const title = item.getAttribute('data-title');
+                    const type = item.getAttribute('data-type');
+                    const status = item.getAttribute('data-status');
+
+                    const matchSearch = title.includes(searchTerm);
+                    const matchTipo = filterTipo === 'all' || type === filterTipo;
+                    const matchEstado = filterEstado === 'all' || status === filterEstado;
+
+                    if (matchSearch && matchTipo && matchEstado) {
+                        item.style.display = '';
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+            });
         }
     </script>
 </html>
