@@ -6,8 +6,10 @@ RUN rm -rf webapps/*
 
 COPY dist/cinefix.war webapps/ROOT.war
 
-RUN sed -i 's/port="8080"/port="${PORT}"/g' conf/server.xml
+ENV PORT=8000
 
-EXPOSE 8080
+RUN sed -i 's/port="8080"/port="8000"/g' conf/server.xml
+
+EXPOSE 8000
 
 CMD ["catalina.sh", "run"]
