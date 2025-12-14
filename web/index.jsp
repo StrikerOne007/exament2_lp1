@@ -7,12 +7,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@page import="java.util.List"%>
 <%@page import="modelo.Movie"%>
-<%
-    if (request.getAttribute("listaMovies") == null) {
-        response.sendRedirect("MovieServlet");
-        return;
-    }
-%>
+
 <!DOCTYPE html>
 <html lang="en">
     <head>
